@@ -5,7 +5,7 @@
     <title>Улучшаем редактор заметок в Forestry</title>
   
 
-  <meta name="generator" content="Hugo 0.85.0" />
+  <meta name="generator" content="Hugo 0.86.0" />
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -219,7 +219,7 @@
 <p>Я бы и дальше страдал, если бы не внезапная мысль перед сном о том, что сервис то — обычное приложение в браузере, с HTML и CSS в основе. Значит, его легко исправить своими CSS-правилами. Помните, раньше были популярные оформлялки для Вконтакте и прочих пожирателей времени? Сейчас тот самый случай, когда их стоило бы применить. Это дешево и сердито, зато РАБОТАЕТ!</p>
 <p>Для начала нам нужно расширение для браузера, которое сможет эти самые стили сохранить и применить к сайту. Я пользуюсь Google Chrome и выбрал одно из топа в каталоге дополнений — <a href="https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne">Stylus</a>. Можете использовать его или выбрать подходящее для своего браузера, это особой роли не играет.</p>
 <p>Затем нужно разобраться, как устроена страница редактора. Это тоже не проблема, открываем редактор и смотрим структуру страницы.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;main-content&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;main-content&#34;</span>&gt;
 	&lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sc-cTjmhe fyLVgw&#34;</span>&gt;...&lt;/<span style="color:#000080">div</span>&gt;
 	&lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sc-imABML fEzRdo&#34;</span>&gt;
 		&lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sc-gkFcWv djIbwi&#34;</span>&gt;...&lt;/<span style="color:#000080">div</span>&gt;
@@ -232,17 +232,17 @@
 <p>Для начала нужно добавить новый проект в Stylus. Кликая на иконку дополнения выбираем пункт Manage и попадаем в редактор стилей. Проект нужно как-нибудь назвать, но если кликать иконку на странице заметки в Forestry, Stylus сам сохранит проект с доменом в качестве имени . Важно так же исправить внизу страницы маску для &ldquo;Applise to&rdquo; как на картинке, чтобы стили применялись для всех страниц, а не только той, что была в момент нажатия на кнопку. Ну и добавить сами стили.</p>
 <p><img src="https://klimchuk.s3.eu-central-1.amazonaws.com/notes/2020/forestry-editor-improvements/forestry-editor-improvements-03.png" alt="Интерфейс дополнения Stylus"></p>
 <p>Первым делом добавим немного flex нашим блокам и заодно поменяем местами вложенные блоки с помощью свойства <code>flex-direction: row-reverse;</code>.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> {
     <span style="color:#000;font-weight:bold">display</span>: <span style="color:#000;font-weight:bold">flex</span>;
     <span style="color:#000;font-weight:bold">flex-wrap</span>: <span style="color:#000;font-weight:bold">wrap</span>;
     <span style="color:#000;font-weight:bold">flex-direction</span>: <span style="color:#000;font-weight:bold">row-reverse</span>;
 }
 </code></pre></div><p>Но ничего не поменялось. Все из-за того, что у вложенных блоков указано свойство <code>position: fixed;</code>, которое заставляет их игнорировать все правила по автоматическому размещению во flex-блоках. Нужно его сбросить на значение по умолчанию.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span> {
     <span style="color:#000;font-weight:bold">position</span>: <span style="color:#000;font-weight:bold">initial</span>;
 }
 </code></pre></div><p>И можно добавить немного визуальной красоты, убрав лишний отступ слева и сделав сам редактор шире 700px, которых объективно маловато, особенно для заметок с фото.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">main-content</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> <span style="color:#000;font-weight:bold">&gt;</span> <span style="color:#000080">div</span>:<span style="color:#3c5d5d;font-weight:bold">last-child</span> {
     <span style="color:#000;font-weight:bold">left</span>: <span style="color:#099">0</span>; 
     <span style="color:#000;font-weight:bold">width</span>: <span style="color:#0086b3">calc</span>(<span style="color:#099">60</span><span style="color:#458;font-weight:bold">%</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">0</span><span style="color:#458;font-weight:bold">px</span>);
 }

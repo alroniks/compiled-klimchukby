@@ -5,7 +5,7 @@
     <title>Как я делал переключатели языков в MODX</title>
   
 
-  <meta name="generator" content="Hugo 0.85.0" />
+  <meta name="generator" content="Hugo 0.86.0" />
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -217,7 +217,7 @@
 <h2 id="переключатель-языка">Переключатель языка</h2>
 <p>Старый список языков на странице входа был крайне избыточен, в нем было 186 языков, тогда как в самом MODX в виде переводов интерфейса доступно только 30, включая основной английский. Первым делом я удалил этот список языков и заменил его на актуальный, <a href="https://github.com/modxcms/revolution/pull/14046/commits/0a1989abbec04290cd363c2864d9b997fa793175">перенеся</a> названия языков в константы класса <code>SecurityLoginManagerController</code>. Конечно же, следом пришлось переписать код для получения и вывода обновленного списка, так как раньше он формировался просто из файла словаря.</p>
 <p>Держать строки, которые могут и должны подлежать переводу, жёстко записанными в коде, крайне плохая практика, поэтому я их перенес в файл словаря, но уже в новом формате. И следом же я добавил новый контроллер, задачей которого стало переключение языка в сессии. Код переключателя довольно примитивный, из параметров запроса он получает язык, на который нужно переключить интерфейс и меняет его в сессии, затем перезагружает страницу.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
 
 <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">function</span> <span style="color:#900;font-weight:bold">process</span>(<span style="color:#000;font-weight:bold">array</span> <span style="color:#008080">$scriptProperties</span> <span style="color:#000;font-weight:bold">=</span> [])
 {
@@ -236,7 +236,7 @@
 <p>Решение в целом было рабочее, но благодаря ценным советам от других разработчиков, получилось его ещё немного усовершенствовать. Проблема крылась в том, что всё ещё сохранялся жестко записанный список языков в классе <code>modLexicon</code> с оригинальными названиями языков, т.е. когда название языка записано на этом же языке, чтобы можно было легко отыскать знакомые слова. Более того, по задумке название языка так же нужно было переводить на другие языки, чтобы в интерфейсе на русском было написано по-русски &ldquo;Английский язык&rdquo;, для целостности восприятия.</p>
 <h3 id="кеширование-списка-языков">Кеширование списка языков</h3>
 <p>Файлы словарей со списком языков были созданы, но чтобы сформировать список для пользователя, нужно было бы каждый раз при открытии страницы загружать и обрабатывать все 30 файлов, чтобы получить самоназвание языка. Следовательно, нужно было как-то эти списки кешировать. Сами словари и так уже кешируются в MODX, нужно было только добавить новый кэш и положить его в уже существующий каталог <code>lexicon_topics</code>. Код довольно простой, при запросе самоназвания языка вызывается метод <a href="https://github.com/modxcms/revolution/pull/14046/commits/b357099cf279a158fa195c9d88d7426f47fd0c4c#diff-dcbfc153565c0ccc5610813a9c27d605R372-R385">getLanguageNativeName</a>, который читает кэш и если значение в кэше есть, просто его возвращает, если же нет, загружает словарь для запрошенного языка, получает из него значение и сохраняет в кэш. Да, при первой загрузке списка он всё так же перебирает 30 файлов, но как только кэш сформирован, в этом больше нет необходимости.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
 
 <span style="color:#000;font-weight:bold">public</span> <span style="color:#000;font-weight:bold">function</span> <span style="color:#900;font-weight:bold">getLanguageNativeName</span>(<span style="color:#008080">$language</span>)
 {
@@ -265,7 +265,7 @@
 <p>Было понятно, что нужно как-то ограничить список языков и первая же идея была оставить только самые ходовые, а остальные спрятать и показывать при необходимости. Закономерно возник вопрос, а какие из них считать ходовыми или популярными? Я обратился за помощью к Марку Хамстре и он поделился статистикой своих сервисов (сервис мониторинга сайтов на MODX – SiteDash и магазин дополнений для MODX – modmore), которые собирают эти данные от подключенных сайтов. В русскоязычном сегменте самым популярным языком всегда будет русский, поэтому было важно узнать распределение &ldquo;там&rdquo;. Имея на руках список из семи самых популярных языков я начал писать логику их отображения.</p>
 <p>Система должна определять язык, который установлен в браузере и предлагать этот язык по умолчанию. Так в целом и происходит, но есть нюансы в зависимости от того, входит этот язык в список популярных или находится в списке остальных.</p>
 <p>Если язык не входит в список популярных, то он добавляется в начало этого списка, а сам список затем обрезается до 7 возможных элементов. Список остальных языков формируется методом исключения популярных языков из списка всех языков. В коде это выглядит достаточно просто и наглядно.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
 <span style="color:#008080">$popular</span> <span style="color:#000;font-weight:bold">=</span> [<span style="color:#d14">&#39;en&#39;</span>, <span style="color:#d14">&#39;de&#39;</span>, <span style="color:#d14">&#39;nl&#39;</span>, <span style="color:#d14">&#39;ru&#39;</span>, <span style="color:#d14">&#39;fr&#39;</span>, <span style="color:#d14">&#39;it&#39;</span>, <span style="color:#d14">&#39;es&#39;</span>];
 <span style="color:#008080">$exists</span> <span style="color:#000;font-weight:bold">=</span> array_search(<span style="color:#008080">$current</span>, <span style="color:#008080">$popular</span>, <span style="color:#000;font-weight:bold">true</span>);
 array_unshift(<span style="color:#008080">$popular</span>, <span style="color:#008080">$exists</span> <span style="color:#000;font-weight:bold">?</span> <span style="color:#008080">$popular</span>[<span style="color:#008080">$exists</span>] <span style="color:#000;font-weight:bold">:</span> <span style="color:#008080">$current</span>);

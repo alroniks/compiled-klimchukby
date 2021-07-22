@@ -5,7 +5,7 @@
     <title>Собственный тип поля в системных настройках</title>
   
 
-  <meta name="generator" content="Hugo 0.85.0" />
+  <meta name="generator" content="Hugo 0.86.0" />
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -227,7 +227,7 @@
 <p>Список значений – это обычный компонент ComboBox. Примеров реализации подобных выпадающих списков в достатке в коде MODX, можно смело подсматривать и копировать. Если хотите вникнуть в суть вопроса глубже, можно посмотреть <a href="https://docs.sencha.com/extjs/3.4.0/#!/api/Ext.form.ComboBox">документацию</a> по этому компоненту.</p>
 <p>Теперь необходимо создать файл с компонентом где-нибудь в <code>assets/components/scf/js/mgr/childhood-periods.combo.js</code>. Вы можете использовать любой путь, в общем-то, я же выбрал тот, который обычно принят в компонентах. Имя файла тоже не важно, но постфикс <code>.combo.js</code> позволяет потом легче находить нужные компоненты по имени файла, когда таких компонентов в дополнении много.</p>
 <p>Компоненты в ExtJS – это обычные функции (замыкания по сути), которые перегружают собственный конструктор описанной там же конфигурацией, а затем ExtJS их регистрирует у себя во внутренней системе и вызывает при обращении к ним.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> ChildhoodPeriods <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">function</span>(config) {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> ChildhoodPeriods <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">function</span>(config) {
   config <span style="color:#000;font-weight:bold">=</span> config <span style="color:#000;font-weight:bold">||</span> {};
 
   Ext.applyIf(config, { <span style="color:#998;font-style:italic">/* Здесь будет конфигурация компонента */</span>});
@@ -235,7 +235,7 @@
   ChildhoodPeriods.superclass.constructor.call(<span style="color:#000;font-weight:bold">this</span>, config);
 };
 </code></pre></div><p>Компонент готов, можно приступить к его настройке. Я не буду описывать все настройки, они достаточно просты и понятны даже исходя из их названий, но про <code>store</code> поясню отдельно.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">ChildhoodPeriods <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">function</span>(config) {
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">ChildhoodPeriods <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">function</span>(config) {
   config <span style="color:#000;font-weight:bold">=</span> config <span style="color:#000;font-weight:bold">||</span> {};
 
   <span style="color:#998;font-style:italic">/* Чуть позже сюда добавим хранилище */</span>
@@ -257,7 +257,7 @@
   ChildhoodPeriods.superclass.constructor.call(<span style="color:#000;font-weight:bold">this</span>, config);
 };
 </code></pre></div><p>По сути, <code>store</code> – это <a href="https://docs.sencha.com/extjs/3.4.0/#!/api/Ext.data.Store">отдельный ExtJS компонент</a>, который отвечает за загрузку и предоставление данных. В нашем случае, мы используем простое локальное хранилище, но есть возможность через хранилище загружать данные с других ресурсов в сети, включая процессоры в MODX (смотрите примеры в коде системы). При определении хранилища важно заполнить два свойства, это определение списка полей - <code>fields</code> и значения в самих полях непосредственно - <code>data</code>. Здесь важно отметить, что такая структура работает как распределенная карта (map) и значения в <code>data</code> присваиваются полям в том порядке, как они указаны в коде. Т.е. в случае первой записи, <code>key</code> будет содержать &lsquo;inf&rsquo;, <code>caption</code> – &lsquo;Infants (0-1 year)&rsquo;.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#998;font-style:italic">// Замените в коде выше строку &#34;const store = null;&#34; кодом, который ниже
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#998;font-style:italic">// Замените в коде выше строку &#34;const store = null;&#34; кодом, который ниже
 </span><span style="color:#998;font-style:italic"></span>
 <span style="color:#000;font-weight:bold">const</span> store <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> Ext.data.SimpleStore({
   fields<span style="color:#000;font-weight:bold">:</span> [<span style="color:#d14">&#39;key&#39;</span>, <span style="color:#d14">&#39;caption&#39;</span>],
@@ -271,24 +271,24 @@
   ]
 });
 </code></pre></div><p>Компонент со списком значений готов, осталось его зарегистрировать. Следующий код говорит ExtJS, что теперь в системе под именем <code>childhood-periods</code> будет доступен компонент со списком значений и теперь его можно свободно использовать по необходимости. В первой строке, что важно, указывается, что компонент должен все остальные функции наследовать от выпадающего списка, встроенного в MODX.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">Ext.extend(ChildhoodPeriods, MODx.combo.ComboBox);
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">Ext.extend(ChildhoodPeriods, MODx.combo.ComboBox);
 Ext.reg(<span style="color:#d14">&#39;childhood-periods&#39;</span>, ChildhoodPeriods);
 </code></pre></div><p><em><a href="https://gist.github.com/Alroniks/3c0a204bb46d3016b33eb5b6c27cf2b2#file-childhood-periods-combo-js">Полный код этого компонента доступен в GitHub Gists.</a></em></p>
 <h2 id="регистрация-своего-типа-ввода">Регистрация своего типа ввода</h2>
 <p>Эта задача оказалось самой интересной, потому что ранее я с ней не сталкивался и пришлось немного попотеть, чтобы найти удачное решение. Самое простое решение было бы написать свой компонент для этого списка и зарегистрировать его вместо системного. Но как я говорил, список конечный и определен в коде системы, следовательно, при обновлении там могут появиться еще записи, которые всегда будут переопределяться нашим компонентом и списком. Еще одна проблема в том, что нам нужно этот системный список копировать в свой плагин, что только бесполезно раздувает код.</p>
 <p>К счастью, ExtJS работает так, что сначала регистрирует все компоненты, а только затем запускает их выполнение, что позволяет нам получить системный компонент, выудить из него список типов и дополнить своими типами, а уже потом зарегистрировать свой компонент вместо системного.</p>
 <p>Но есть нюанс, потому что в ExtJS компоненты создаются по требованию и на момент загрузки страницы существует только определение типа, но сам компонент, при попытке к нему обратиться, выдаст <code>undefined</code>. Поэтому, чтобы решить эту проблему, делаем трюк к созданием компонента вручную.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> TypesListSpec <span style="color:#000;font-weight:bold">=</span> Ext.ComponentMgr.create(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> TypesListSpec <span style="color:#000;font-weight:bold">=</span> Ext.ComponentMgr.create(
   Ext.ComponentMgr.types[<span style="color:#d14">&#39;modx-combo-xtype-spec&#39;</span>]
 );
 </code></pre></div><p>Теперь остается только получить хранилище из базовой конфигурации и добавить в него свои записи с данными о новых типах. В нашем случае только одну запись.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">TypesListSpec.initialConfig.store.add(record);
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">TypesListSpec.initialConfig.store.add(record);
 </code></pre></div><p>Здесь стоит уточнить, что запись, это не просто объект или массив, а это именно объект класса <a href="https://docs.sencha.com/extjs/3.4.0/#!/api/Ext.data.Record">Record</a> и просто так создать его нельзя, не зная всех параметров. Но к счастью, хранилища в ExtJS предоставляют удобные замыкания-конструкторы (<code>recordType</code>) для создания подобных записей.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">const</span> record <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TypesListSpec.initialConfig.store.recordType(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">const</span> record <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">new</span> TypesListSpec.initialConfig.store.recordType(
   {d<span style="color:#000;font-weight:bold">:</span> <span style="color:#d14">&#39;Childhood Periods&#39;</span>, v<span style="color:#000;font-weight:bold">:</span> <span style="color:#d14">&#39;childhood-periods&#39;</span>}
 );
 </code></pre></div><p>Теперь нужно собрать это всё вместе и создать новый компонент со списком типов, где в качестве хранилища определить только что отредактированное, с новыми элементами. И не забыть зарегистрировать  новый компонент вместо старого.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> TypesListSpec <span style="color:#000;font-weight:bold">=</span> Ext.ComponentMgr.create(
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#000;font-weight:bold">let</span> TypesListSpec <span style="color:#000;font-weight:bold">=</span> Ext.ComponentMgr.create(
   Ext.ComponentMgr.types[<span style="color:#d14">&#39;modx-combo-xtype-spec&#39;</span>]
 );
 
@@ -322,7 +322,7 @@ Ext.reg(<span style="color:#d14">&#39;modx-combo-xtype-spec&#39;</span>, TypesLi
 <h2 id="регистрация-frontend-компонентов-через-плагин">Регистрация frontend-компонентов через плагин</h2>
 <p>Система плагинов в MODX уникальна тем, что позволяет достаточно легко внедриться в процесс формирования страницы и загрузить дополнительный код в нужный промежуток времени. Таким образом, у нас есть возможность загрузить наши плагины и компоненты до начала генерации страницы панели управления, тем самым изменить поведение по умолчанию.</p>
 <p>Для того, чтобы загрузить наши файлы, нужно создать плагин, который будет реагировать на событие  <code>OnManagerPageBeforeRender</code>. Важно не забыть отметить это событие на вкладке &ldquo;Системные события&rdquo; при создании плагина. Затем в коде самого плагина указать, какие файлы подключить. Полный код плагина чуть длиннее, но за кадром остались лишь дополнительные проверки, которые позволяют плагину срабатывать только когда есть необходимость. <em><a href="https://gist.github.com/Alroniks/3c0a204bb46d3016b33eb5b6c27cf2b2#file-customsettingfields-php">Полный код плагина на GitHub Gists.</a></em></p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#000;font-weight:bold">&lt;?</span>php
 
 <span style="color:#008080">$pathPrefix</span> <span style="color:#000;font-weight:bold">=</span> MODX_ASSETS_URL <span style="color:#000;font-weight:bold">.</span> <span style="color:#d14">&#39;components/csf/js/mgr/&#39;</span>;
 

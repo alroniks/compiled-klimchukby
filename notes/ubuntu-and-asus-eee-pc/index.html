@@ -5,7 +5,7 @@
     <title>Ubuntu и ASUS EEE PC — настраиваем подсветку экрана</title>
   
 
-  <meta name="generator" content="Hugo 0.85.0" />
+  <meta name="generator" content="Hugo 0.86.0" />
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -224,12 +224,12 @@
 <p>В свое время долго мучился я с нерабочей подсветкой в своей машинке. Т.е. плохо работала кнопка &ldquo;fn&rdquo;. Нажимал, а оно подсветку рандомно меняло при каждом нажатии, хотя апплет правильно показывал положение ползунка. Я нашел решение когда-то и забыл про него. При установке повезло вспомнить о том, что проблемы были и я решил записать это решение, чтобы в случае чего потом знать, где искать.</p>
 <p>А делается все просто (по крайней мере для моего аппарата).</p>
 <p>Для начала открываем любимую консоль и пишем:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nano /etc/default/grub
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nano /etc/default/grub
 </code></pre></div><p>Там находим строчку вида <code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;тут какие-то параметры могут быть&quot;</code></p>
 <p>И дописываем туда свои параметры. У меня в итоге получилось следующее:</p>
 <pre><code>GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash acpi_osi=Linux acpi_backlight=vendor&quot;
 </code></pre><p>Нажимаем <code>Ctrl+O</code>, затем <code>Ctrl+X</code> и выполняем обновление конфигурации grub:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo update-grub
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo update-grub
 </code></pre></div><p>И перезагружаемся. Теперь проблем быть не должно. Если проблемы есть, ну тогда поздравляю вас с новым диагнозом - красноглазие ;)</p>
 
                 </div>
